@@ -31,4 +31,23 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question_type    
+    
+
+    def save(self, *args, **kwargs):
+        # Get the force limit for the question type
+        force_limit = self.DEFAULT_FORCE_LIMITS.get(self.question_type)
+
+        # Ensure max_length does not exceed the force limit
+        if self.max_length is None:
+            self.max_length = force_limit  # Set to default if not provided
+        elif self.max_length > force_limit:
+            raise ValueError(
+                f"max_length for {self.question_type} cannot exceed {force_limit} characters."
+            )
+
+        super().save(*args, **kwargs)
+
+
+
+
 
