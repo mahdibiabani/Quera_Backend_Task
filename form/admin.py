@@ -32,14 +32,16 @@ class ResponseInline(admin.TabularInline):
 class FormAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'created_at')
     search_fields = ('title',)
-    inlines = [QuestionInline, ResponseInline]
+    inlines = [QuestionInline]
     ordering = ('-created_at',)
-
+    
     def get_inline_instances(self, request, obj=None):
         # Show ResponseInline only when viewing a specific form
+        inline_instances = super().get_inline_instances(request, obj)
         if obj:
-            return [QuestionInline, ResponseInline]
-        return super().get_inline_instances(request, obj)
+            inline_instances.append(ResponseInline(self.model, self.admin_site))
+        return inline_instances
+
 
 
 @admin.register(Question)

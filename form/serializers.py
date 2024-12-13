@@ -34,16 +34,19 @@ class ResponseSerializer(serializers.ModelSerializer):
         if question.question_type == 'numeric_answer':
             try:
                 value = float(answer)
+                # Check for min and max value constraints
                 if question.min_value is not None and value < question.min_value:
                     raise serializers.ValidationError(f"Answer must be at least {question.min_value}.")
                 if question.max_value is not None and value > question.max_value:
                     raise serializers.ValidationError(f"Answer must be at most {question.max_value}.")
-                if question.number_type == 'integer' and not value.is_integer():
+                # Check for number type (integer or float)
+                if question.number_type == 'integer' and not float(value).is_integer():
                     raise serializers.ValidationError("Answer must be an integer.")
             except ValueError:
                 raise serializers.ValidationError("Answer must be a valid number.")
 
         elif question.question_type in ['short_answer', 'complete_answer', 'email']:
+            # Validate the length of the answer for text-based questions
             if len(answer) > question.max_length:
                 raise serializers.ValidationError(f"Answer cannot exceed {question.max_length} characters.")
 
