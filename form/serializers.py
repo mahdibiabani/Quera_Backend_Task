@@ -9,7 +9,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
 class FormSerializer(serializers.ModelSerializer):
-    questions = QuestionSerializer(many=True, read_only=True, source='questions')
+    questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Form
@@ -19,36 +19,32 @@ class FormSerializer(serializers.ModelSerializer):
 class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Response
-        fields = ['id', 'form', 'question', 'answer']   
+        fields = ['id', 'form', 'question', 'answer']  # Include all fields
+        read_only_fields = ['form']  # Make `form` field read-only
 
     def validate(self, data):
         question = data['question']
         answer = data['answer']
 
-        # Check if the question is required and if an answer is provided
+        # Validate required questions
         if question.required and not answer:
             raise serializers.ValidationError(f"The question '{question.text}' is required.")
 
-        # Validate answer based on question type
+        # Validate based on question type
         if question.question_type == 'numeric_answer':
             try:
                 value = float(answer)
-
-                # Check for min and max value constraints
                 if question.min_value is not None and value < question.min_value:
                     raise serializers.ValidationError(f"Answer must be at least {question.min_value}.")
                 if question.max_value is not None and value > question.max_value:
                     raise serializers.ValidationError(f"Answer must be at most {question.max_value}.")
-                
-                # Check for number type (integer or float)
-                if question.number_type == 'integer' and not float(value).is_integer():
+                if question.number_type == 'integer' and not value.is_integer():
                     raise serializers.ValidationError("Answer must be an integer.")
             except ValueError:
                 raise serializers.ValidationError("Answer must be a valid number.")
 
         elif question.question_type in ['short_answer', 'complete_answer', 'email']:
-            # Validate the length of the answer for text-based questions
             if len(answer) > question.max_length:
                 raise serializers.ValidationError(f"Answer cannot exceed {question.max_length} characters.")
 
-        return data         
+        return data       

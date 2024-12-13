@@ -24,20 +24,9 @@ class ResponseViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]  # Allow anyone to submit responses
 
     def perform_create(self, serializer):
-        # Ensure the user is submitting a response for an existing form and question
-        form_id = self.request.data.get('form')
-        question_id = self.request.data.get('question')
-
-        # Validate that the form exists
-        if not Form.objects.filter(id=form_id).exists():
-            raise serializers.ValidationError("The form does not exist.")
-
-        # Validate that the question exists
-        if not Question.objects.filter(id=question_id).exists():
-            raise serializers.ValidationError("The question does not exist.")
-
-        # Save the response
-        serializer.save()
+        question = serializer.validated_data['question']
+        form = question.form  # Automatically get the form from the question
+        serializer.save(form=form)
 
     @action(detail=False, methods=['post'], url_path='submit')
     def submit_responses(self, request):
