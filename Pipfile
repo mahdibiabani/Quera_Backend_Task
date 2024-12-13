@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 drf-nested-routers = "*"
 djangorestframework = "*"
+django-jazzmin = "*"
 
 [dev-packages]
 
