@@ -1,11 +1,13 @@
-from django.urls import include, path
-from rest_framework_nested import routers
+from django.urls import path, include
+from rest_framework_nested.routers import DefaultRouter, NestedDefaultRouter
+from .views import FormViewSet, ResponseViewSet
 
-from . import views
+# Create the main router
+router = DefaultRouter()
+router.register(r'forms', FormViewSet)
 
-router = routers.DefaultRouter()
+# Create a nested router for responses under forms
+forms_router = NestedDefaultRouter(router, r'forms', lookup='form')
+forms_router.register(r'responses', ResponseViewSet, basename='form-responses')
 
-router.register('forms', views.FormViewSet, basename='form')
-router.register('responses', views.ResponseViewSet, basename='response')
-
-urlpatterns = router.urls
+urlpatterns = router.urls + forms_router.urls
