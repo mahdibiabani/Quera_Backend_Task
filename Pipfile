@@ -9,6 +9,7 @@ djangorestframework = "*"
 django-jazzmin = "*"
 pytest = "*"
 pytest-django = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 

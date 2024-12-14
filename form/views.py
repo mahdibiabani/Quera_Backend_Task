@@ -6,12 +6,30 @@ from .serializers import FormSerializer, ResponseSerializer, QuestionSerializer
 
 
 class FormViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Viewset for retrieving and listing forms.
+
+    Provides:
+    - GET /forms/ -> List all forms
+    - GET /forms/{id}/ -> Retrieve a specific form
+    - GET /forms/{id}/questions/ -> Retrieve all questions for a specific form
+    """
+     
     queryset = Form.objects.all()
     serializer_class = FormSerializer
     permission_classes = [permissions.AllowAny]  # Allow anyone to view forms
 
     @action(detail=True, methods=['get'], url_path='questions')
     def get_questions(self, request, pk=None):
+        """
+        Retrieve all questions for a specific form.
+
+        Args:
+        - pk: ID of the form
+
+        Returns:
+        - List of questions for the form
+        """
         form = self.get_object()
         questions = form.questions.all()
         serializer = QuestionSerializer(questions, many=True)
@@ -19,6 +37,13 @@ class FormViewSet(viewsets.ReadOnlyModelViewSet):
     
 
 class ResponseViewSet(viewsets.ModelViewSet):
+    """
+    Viewset for handling responses to forms.
+
+    Provides:
+    - POST /responses/ -> Create a new response
+    - GET /responses/{id}/ -> Retrieve a specific response
+    """
     queryset = Response.objects.all()
     serializer_class = ResponseSerializer
     permission_classes = [permissions.AllowAny]  # Allow anyone to submit responses
@@ -30,7 +55,16 @@ class ResponseViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], url_path='submit')
     def submit_responses(self, request):
-        # Get form and responses from the request
+        """
+        Submit responses to a form.
+
+        Args:
+        - form: ID of the form
+        - responses: List of responses with question IDs and answers
+
+        Returns:
+        - Success or error message
+        """
         form_id = request.data.get('form')
         responses = request.data.get('responses', [])
 

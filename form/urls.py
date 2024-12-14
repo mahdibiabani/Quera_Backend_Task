@@ -4,7 +4,7 @@ from .views import FormViewSet, ResponseViewSet
 
 # Create the main router
 router = DefaultRouter()
-router.register(r'forms', FormViewSet)
+router.register(r'forms', FormViewSet, basename='form')
 
 # Create a nested router for responses under forms
 forms_router = NestedDefaultRouter(router, r'forms', lookup='form')
