@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from .models import Form, Question, Response
 
 
@@ -13,6 +14,9 @@ class QuestionInline(admin.TabularInline):
         if obj:
             return 0  # Show no extra question rows in form
         return super().get_extra(request, obj, **kwargs)
+    
+
+    
 
 
 class ResponseInline(admin.TabularInline):
