@@ -16,7 +16,12 @@ class QuestionInline(admin.TabularInline):
         return super().get_extra(request, obj, **kwargs)
     
 
-    
+    def save_model(self, request, obj, form, change):
+        try:
+            obj.full_clean()  # Ensures the clean method is triggered
+        except ValidationError as e:
+            form.add_error(None, e)
+        super().save_model(request, obj, form, change)
 
 
 class ResponseInline(admin.TabularInline):
