@@ -52,43 +52,4 @@ class ResponseViewSet(viewsets.ModelViewSet):
         question = serializer.validated_data['question']
         form = question.form  # Automatically get the form from the question
         serializer.save(form=form)
-
-    @action(detail=False, methods=['post'], url_path='submit')
-    def submit_responses(self, request):
-        """
-        Submit responses to a form.
-
-        Args:
-        - form: ID of the form
-        - responses: List of responses with question IDs and answers
-
-        Returns:
-        - Success or error message
-        """
-        form_id = request.data.get('form')
-        responses = request.data.get('responses', [])
-
-        # Validate form exists
-        form = Form.objects.filter(id=form_id).first()
-        if not form:
-            return Response({"error": "Form not found"}, status=404)
-
-        # Process each response
-        for response_data in responses:
-            question_id = response_data.get('question')
-            answer = response_data.get('answer')
-
-            # Validate that the question exists
-            question = Question.objects.filter(id=question_id).first()
-            if not question:
-                return Response({"error": f"Question with ID {question_id} not found"}, status=404)
-
-            # Validate answer (already done in ResponseSerializer)
-            response_serializer = ResponseSerializer(data=response_data)
-            if not response_serializer.is_valid():
-                return Response(response_serializer.errors, status=400)
-
-            # Save the response
-            response_serializer.save()
-
-        return Response({"message": "Responses submitted successfully"}, status=201)    
+  
