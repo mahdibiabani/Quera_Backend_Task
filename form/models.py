@@ -84,7 +84,7 @@ class Question(models.Model):
         super().save(*args, **kwargs)
 
 
-class Response(models.Model):
+class FormResponse(models.Model):
     question = models.ForeignKey(Question, related_name="responses", on_delete=models.CASCADE)
     form = models.ForeignKey(Form, related_name="responses", on_delete=models.CASCADE)
     answer = models.TextField()     

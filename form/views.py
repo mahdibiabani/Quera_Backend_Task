@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Form, Question, Response
+from .models import Form, Question, FormResponse
 from .serializers import FormSerializer, ResponseSerializer, QuestionSerializer
 
 
@@ -44,7 +44,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
     - POST /responses/ -> Create a new response
     - GET /responses/{id}/ -> Retrieve a specific response
     """
-    queryset = Response.objects.all()
+    queryset = FormResponse.objects.all()
     serializer_class = ResponseSerializer
     permission_classes = [permissions.AllowAny]  # Allow anyone to submit responses
 

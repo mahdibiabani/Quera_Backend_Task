@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Form, Question, Response
+from .models import Form, Question, FormResponse
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class FormSerializer(serializers.ModelSerializer):
 
 class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Response
+        model = FormResponse
         fields = ['id', 'form', 'question', 'answer']  # Include all fields
         read_only_fields = ['form']  # Make `form` field read-only
 

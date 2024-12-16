@@ -1,7 +1,7 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from form.models import Form, Question, Response
+from form.models import Form, Question, FormResponse
 
 class FormViewSetTests(APITestCase):
     def setUp(self):

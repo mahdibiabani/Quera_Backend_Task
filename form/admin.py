@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from .models import Form, Question, Response
+from .models import Form, Question, FormResponse
 
 
 class QuestionInline(admin.TabularInline):
@@ -25,7 +25,7 @@ class QuestionInline(admin.TabularInline):
 
 
 class ResponseInline(admin.TabularInline):
-    model = Response
+    model = FormResponse
     extra = 0
     fields = ('question', 'answer')
     readonly_fields = ('question', 'answer')
@@ -61,7 +61,7 @@ class QuestionAdmin(admin.ModelAdmin):
     ordering = ('form', 'id')
 
 
-@admin.register(Response)
+@admin.register(FormResponse)
 class ResponseAdmin(admin.ModelAdmin):
     list_display = ('id', 'form', 'question', 'answer')
     list_filter = ('form', 'question')

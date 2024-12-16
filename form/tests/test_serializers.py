@@ -1,6 +1,6 @@
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APITestCase
-from form.models import Form, Question, Response
+from form.models import Form, Question, FormResponse
 from form.serializers import FormSerializer, QuestionSerializer, ResponseSerializer
 
 

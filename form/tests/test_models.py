@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
-from form.models import Form, Question, Response
+from form.models import Form, Question, FormResponse
 
 
 
@@ -103,7 +103,7 @@ class ResponseModelTest(TestCase):
         )
 
     def test_response_creation(self):
-        response = Response.objects.create(
+        response = FormResponse.objects.create(
             question=self.question,
             form=self.form,
             answer="John Doe"
