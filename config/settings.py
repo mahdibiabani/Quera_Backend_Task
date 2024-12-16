@@ -139,3 +139,8 @@ REST_FRAMEWORK = {
 }
 
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Form API Documentation',  # Title in the header
+    'DESCRIPTION': 'This is the API documentation for my project.',
+}
+    
